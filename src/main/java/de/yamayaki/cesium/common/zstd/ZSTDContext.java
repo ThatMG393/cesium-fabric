@@ -1,5 +1,7 @@
 package de.yamayaki.cesium.common.zstd;
 
+import static com.github.luben.zstd.Zstd.ParamSwitch.*;
+
 import com.github.luben.zstd.ZstdCompressCtx;
 import com.github.luben.zstd.ZstdDecompressCtx;
 import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
@@ -23,6 +25,9 @@ public class ZSTDContext {
     private ZstdCompressCtx compressCtx() {
         final ZstdCompressCtx ctx = new ZstdCompressCtx();
         ctx.setLevel(compressionLevel);
+        ctx.setJobSize(2 /* should be configurable but who cares anyway */);
+        ctx.setWindowLog(23);
+        ctx.setEnableLongDistanceMatching(ENABLE);
 
         if (usesDictionary) {
             ctx.loadDict(dictionary.compressDictionary());
